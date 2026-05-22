@@ -96,18 +96,24 @@ class Navigation extends _$Navigation {
   }
 
   NavigationState _getPages(List<PageLayout> layouts) {
-    _allPages =
-        layouts
-            .map(
-              (pageLayout) => NavigationItemData(
-                title: NavigationHelper.getLabel(pageLayout),
-                icon: NavigationHelper.getIcon(pageLayout),
-                path: NavigationHelper.getPath(pageLayout),
-                id: pageLayout.id?.name,
-                showNotificationBadge: pageLayout.id == Pages.notifications,
-              ),
-            )
-            .toList();
+    _allPages = [
+      ...layouts.map(
+        (pageLayout) => NavigationItemData(
+          title: NavigationHelper.getLabel(pageLayout),
+          icon: NavigationHelper.getIcon(pageLayout),
+          path: NavigationHelper.getPath(pageLayout),
+          id: pageLayout.id?.name,
+          showNotificationBadge: pageLayout.id == Pages.notifications,
+        ),
+      ),
+      const NavigationItemData(title: 'Smart Devices', icon: Icons.devices_rounded, path: '/smart-devices'),
+      const NavigationItemData(title: 'Energy', icon: Icons.bolt_rounded, path: '/energy'),
+      const NavigationItemData(title: 'Automations', icon: Icons.schedule_rounded, path: '/automations'),
+      const NavigationItemData(title: 'Scenes', icon: Icons.auto_awesome_rounded, path: '/scenes'),
+      const NavigationItemData(title: 'Add Device', icon: Icons.add_circle_outline_rounded, path: '/provision'),
+      const NavigationItemData(title: 'Gateway Account', icon: Icons.person_add_rounded, path: '/gateway/register'),
+      const NavigationItemData(title: 'Device Icons', icon: Icons.widgets_rounded, path: '/device-icons'),
+    ];
     final bool shouldAddProfile =
         _allPages.length < 4 &&
         _allPages.firstWhereOrNull((e) {

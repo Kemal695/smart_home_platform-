@@ -15,7 +15,7 @@ ThemeData tbDarkTheme = ThemeData(
   brightness: Brightness.dark,
   colorScheme: darkTheme.colorScheme.copyWith(
     primary: AppColors.darkPrimaryBlue,
-    secondary: Colors.deepOrange,
+    secondary: AppColors.secondaryBlue,
   ),
   
   inputDecorationTheme: InputDecorationTheme(

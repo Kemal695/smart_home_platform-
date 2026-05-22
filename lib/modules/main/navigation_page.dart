@@ -38,6 +38,7 @@ class NavigationPage extends HookConsumerWidget {
     // Update current index based on current route
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
         final currentPath = GoRouterState.of(context).uri.toString();
         final newIndex = NavigationHelper.getCurrentIndexFromPath(
           currentPath,

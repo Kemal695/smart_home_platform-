@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
   
-  // Primary Brand Colors (CE Blue Theme)
-  static const primaryBlue = Color(0xFF305680);
-  static const secondaryBlue = Color(0xFF527dad);
-  static const darkPrimaryBlue = Color(0xFF9fa8da);
+  // Primary Brand Colors (MyHome Theme)
+  static const primaryBlue = Color(0xFF051D40);
+  static const secondaryBlue = Color(0xFF145DA0);
+  static const darkPrimaryBlue = Color(0xFF6088C0);
   
   // Surface Colors
   static const white = Color(0xFFFFFFFF);
@@ -43,35 +43,35 @@ class AppColors {
   static const cameraBackground = Color(0xFF828282);
   
   // Selection and Focus Colors
-  static const selectionColor = Color(0x33305680); // primaryBlue with 20% opacity
+  static const selectionColor = Color(0x33051D40); // primaryBlue with 20% opacity
   static const focusColor = primaryBlue;
   
   // Material Color Swatch for Primary Blue
-  static const MaterialColor primarySwatch = MaterialColor(0xFF305680, <int, Color>{
-    50: Color(0xFFE8EAF6),
-    100: Color(0xFFC5CAE9),
-    200: Color(0xFF9FA8DA),
-    300: Color(0xFF7986CB),
-    400: Color(0xFF5C6BC0),
+  static const MaterialColor primarySwatch = MaterialColor(0xFF051D40, <int, Color>{
+    50: Color(0xFFE3EEF9),
+    100: Color(0xFFB8D0ED),
+    200: Color(0xFF89B0E0),
+    300: Color(0xFF5A90D3),
+    400: Color(0xFF3678C9),
     500: primaryBlue,
     600: secondaryBlue,
-    700: Color(0xFF303F9F),
-    800: Color(0xFF283593),
-    900: Color(0xFF1A237E),
+    700: Color(0xFF0F4A8A),
+    800: Color(0xFF0A3670),
+    900: Color(0xFF051D40),
   });
   
   // Dark Theme Material Color Swatch
-  static const MaterialColor darkPrimarySwatch = MaterialColor(0xFF305680, <int, Color>{
-    50: Color(0xFFE8EAF6),
-    100: Color(0xFFC5CAE9),
-    200: Color(0xFF9FA8DA),
-    300: Color(0xFF7986CB),
-    400: Color(0xFF5C6BC0),
+  static const MaterialColor darkPrimarySwatch = MaterialColor(0xFF6088C0, <int, Color>{
+    50: Color(0xFFE3EEF9),
+    100: Color(0xFFB8D0ED),
+    200: Color(0xFF89B0E0),
+    300: Color(0xFF5A90D3),
+    400: Color(0xFF3678C9),
     500: darkPrimaryBlue,
     600: secondaryBlue,
-    700: Color(0xFF303F9F),
-    800: primaryBlue,
-    900: Color(0xFF1A237E),
+    700: Color(0xFF0F4A8A),
+    800: Color(0xFF0A3670),
+    900: Color(0xFF051D40),
   });
   
   // Getters for dynamic color access

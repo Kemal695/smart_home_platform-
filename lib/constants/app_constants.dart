@@ -3,6 +3,7 @@ import 'package:thingsboard_app/modules/main/model/navigation_type.dart';
 abstract final class ThingsboardAppConstants {
   static const thingsBoardApiEndpoint = String.fromEnvironment(
     'thingsboardApiEndpoint',
+    defaultValue: 'http://192.168.1.100:9090',
   );
   static const thingsboardOAuth2CallbackUrlScheme = String.fromEnvironment(
     'thingsboardOAuth2CallbackUrlScheme',

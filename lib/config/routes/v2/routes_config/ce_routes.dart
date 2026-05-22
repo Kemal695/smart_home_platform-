@@ -9,10 +9,15 @@ import 'package:thingsboard_app/config/routes/v2/router_2.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/alarm_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/asset_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/audit_log_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/automation_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/customer_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/dashboard_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/device_control_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/device_icon_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/device_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/energy_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/esp_provisioning_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/gateway_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/home_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/login_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/main_routes.dart';
@@ -20,7 +25,10 @@ import 'package:thingsboard_app/config/routes/v2/routes_config/routes/more_route
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/noauth_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/notification_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/profile_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/provisioning_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/root_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/scene_routes.dart';
+import 'package:thingsboard_app/config/routes/v2/routes_config/routes/smart_device_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/tenant_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/ui_utils_routes.dart';
 import 'package:thingsboard_app/config/routes/v2/routes_config/routes/url_routes.dart';
@@ -44,6 +52,14 @@ List<RouteBase> getRoutes() {
         ...uiUtilsRoutes,
         ...rootRoutes,
         ...moreRoutes,
+        ...deviceControlRoutes,
+        ...deviceIconRoutes,
+        ...energyRoutes,
+        ...automationRoutes,
+        ...sceneRoutes,
+        ...smartDeviceRoutes,
+        ...gatewayRoutes,
+        ...provisioningRoutes,
       ],
     ),
   ];

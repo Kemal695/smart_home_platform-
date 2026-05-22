@@ -1,5 +1,5 @@
 {
-  "appTitle": "ThingsBoard",
+  "appTitle": "MyHome",
   "home": "Home",
   "devices": "{count, plural, =1{Device} other{Devices}}",
   "@devices": {
@@ -21,7 +21,7 @@
   "noAuditLogsFound": "No audit logs found",
   "logout": "Log Out",
   "login": "Log In",
-  "logoDefaultValue": "ThingsBoard Logo",
+  "logoDefaultValue": "MyHome Logo",
   "loginToYourAccount": "Login to your account",
   "email": "Email",
   "emailRequireText": "Email is required.",

@@ -8,6 +8,7 @@ import 'package:thingsboard_app/core/auth/login/models/login_state.dart';
 import 'package:thingsboard_app/core/auth/oauth2/i_oauth2_client.dart';
 import 'package:thingsboard_app/generated/l10n.dart';
 import 'package:thingsboard_app/locator.dart';
+import 'package:thingsboard_app/services/gateway_auth_service.dart';
 import 'package:thingsboard_app/utils/services/communication/events/user_loaded_event.dart';
 import 'package:thingsboard_app/utils/services/communication/i_communication_service.dart';
 import 'package:thingsboard_app/utils/services/device_info/i_device_info_service.dart';
@@ -33,7 +34,10 @@ class Login extends _$Login {
       await handleUserLoaded();
     });
     ref.onDispose(() => _listener.cancel());
-    Future(() => handleUserLoaded());
+    Future(() async {
+      await handleUserLoaded();
+      await ref.read(gatewayAuthProvider).tryLoadStoredToken();
+    });
     return const LoginState(isUserLoaded: false);
   }
 
@@ -42,6 +46,7 @@ class Login extends _$Login {
         state.isFullyAuthenticated()) {
       await getIt<NotificationService>().logout();
     }
+    ref.read(gatewayAuthProvider).logout();
     await _tbClient.logout(requestConfig: RequestConfig(ignoreErrors: true));
   }
 
@@ -75,6 +80,7 @@ class Login extends _$Login {
     } catch (e) {
       return false;
     }
+    await ref.read(gatewayAuthProvider).login(email, password);
     return true;
   }
 
