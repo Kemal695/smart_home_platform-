@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thingsboard_app/services/gateway_auth_service.dart';
 import 'package:thingsboard_app/services/smart_home_api.dart';
 
 enum TriggerType { schedule, deviceState, sensorThreshold, sunriseSunset, manual }
@@ -64,15 +65,19 @@ final class Automation {
 
 final automationListProvider = StateNotifierProvider<AutomationListNotifier, AsyncValue<List<Automation>>>((ref) {
   final dio = ref.read(smartHomeDioProvider);
-  return AutomationListNotifier(dio);
+  return AutomationListNotifier(dio, ref);
 });
 
 class AutomationListNotifier extends StateNotifier<AsyncValue<List<Automation>>> {
-  AutomationListNotifier(this._dio) : super(const AsyncLoading()) {
+  AutomationListNotifier(this._dio, this._ref) : super(const AsyncLoading()) {
+    _ref.listen(gatewayTokenProvider, (prev, next) {
+      if (prev == null && next != null) load();
+    });
     load();
   }
 
   final Dio _dio;
+  final Ref _ref;
 
   Future<void> load() async {
     state = const AsyncLoading();
@@ -102,11 +107,14 @@ class AutomationListNotifier extends StateNotifier<AsyncValue<List<Automation>>>
     ActionType actionType = ActionType.deviceCommand,
   }) async {
     try {
+      final rule = _buildDefaultRule(triggerType, actionType);
       await _dio.post<Map<String, dynamic>>('/api/automations', data: {
         'name': name,
         if (description != null) 'description': description,
         'triggerType': _toServerEnum(triggerType.name),
         'actionType': _toServerEnum(actionType.name),
+        'enabled': true,
+        'rules': [rule],
       });
       load();
       return null;
@@ -114,6 +122,29 @@ class AutomationListNotifier extends StateNotifier<AsyncValue<List<Automation>>>
       return e.toString();
     }
   }
+
+  Map<String, dynamic> _buildDefaultRule(TriggerType triggerType, ActionType actionType) {
+    return {
+      'conditionJson': _buildDefaultCondition(triggerType),
+      'actionJson': _buildDefaultAction(actionType),
+      'sortOrder': 0,
+    };
+  }
+
+  Map<String, dynamic> _buildDefaultCondition(TriggerType type) => switch (type) {
+    TriggerType.schedule         => {'cron': '0 0 * * *', 'timezone': 'UTC'},
+    TriggerType.deviceState      => {'deviceId': '', 'method': 'setPower', 'expectedValue': true},
+    TriggerType.sensorThreshold  => {'metric': 'temperature', 'op': 'gt', 'value': 30},
+    TriggerType.sunriseSunset    => {'event': 'sunset', 'offset': 0},
+    TriggerType.manual           => {'manual': true},
+  };
+
+  Map<String, dynamic> _buildDefaultAction(ActionType type) => switch (type) {
+    ActionType.deviceCommand  => {'deviceId': '', 'method': 'setPower', 'params': {'state': true}},
+    ActionType.sceneActivate  => {'sceneId': ''},
+    ActionType.notification   => {'title': 'Automation triggered', 'body': ''},
+    ActionType.webhook        => {'url': '', 'method': 'POST'},
+  };
 
   static String _toServerEnum(String camelCase) =>
     camelCase.replaceAllMapped(RegExp(r'[A-Z]'), (m) => '_${m.group(0)}').toUpperCase();

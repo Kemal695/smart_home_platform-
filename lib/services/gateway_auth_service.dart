@@ -23,12 +23,56 @@ class GatewayAuthService {
   final String _host;
   final Ref _ref;
 
+  Future<void> storeCredentials(String email, String password) async {
+    await Future.wait([
+      _storage.write(key: 'gateway_email', value: email),
+      _storage.write(key: 'gateway_password', value: password),
+    ]);
+  }
+
+  void clearCredentials() {
+    _storage.delete(key: 'gateway_email');
+    _storage.delete(key: 'gateway_password');
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final results = await Future.wait([
+      _storage.read(key: 'gateway_email'),
+      _storage.read(key: 'gateway_password'),
+      _storage.read(key: 'gateway_token'),
+    ]);
+    if (results[2] != null) {
+      _cache.accessToken = results[2] as String;
+      _ref.read(gatewayTokenProvider.notifier).state = results[2] as String;
+      return true;
+    }
+    final email = results[0] as String?;
+    final password = results[1] as String?;
+    if (email != null && password != null) {
+      return login(email, password);
+    }
+    return false;
+  }
+
   Dio _dio() => Dio(BaseOptions(
     baseUrl: 'http://$_host:8080',
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 15),
     headers: {'Content-Type': 'application/json'},
   ));
+
+  Future<bool> register(String name, String email, String password) async {
+    try {
+      await _dio().post('/api/auth/register', data: {
+        'name': name,
+        'email': email,
+        'password': password,
+      });
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   Future<bool> login(String email, String password) async {
     try {
@@ -102,5 +146,6 @@ class GatewayAuthService {
     _ref.read(gatewayTokenProvider.notifier).state = null;
     _storage.delete(key: 'gateway_token');
     _storage.delete(key: 'gateway_refresh');
+    clearCredentials();
   }
 }

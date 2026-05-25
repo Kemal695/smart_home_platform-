@@ -1,0 +1,27 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/smart_home_db
+    username: smarthome
+    password: ${POSTGRES_PASSWORD:smarthome_dev}
+  jpa:
+    hibernate.ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+thingsboard:
+  base-url: http://thingsboard:9090
+  username: ${TB_USERNAME:tenant@thingsboard.org}
+  password: ${TB_PASSWORD:tenant}
+  token-ttl-seconds: 3300
+
+services:
+  device-url: http://device-service:8082
+  notification-url: http://notification-service:8085
+
+app:
+  backend-internal-url: http://automation-service:8084
+
+management:
+  endpoints.web.exposure.include: health,info

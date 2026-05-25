@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:thingsboard_app/services/gateway_auth_service.dart';
 import 'package:thingsboard_app/services/smart_home_api.dart';
 
 final class SceneActionItem {
@@ -54,15 +55,19 @@ final class Scene {
 
 final sceneListProvider = StateNotifierProvider<SceneListNotifier, AsyncValue<List<Scene>>>((ref) {
   final dio = ref.read(smartHomeDioProvider);
-  return SceneListNotifier(dio);
+  return SceneListNotifier(dio, ref);
 });
 
 class SceneListNotifier extends StateNotifier<AsyncValue<List<Scene>>> {
-  SceneListNotifier(this._dio) : super(const AsyncLoading()) {
+  SceneListNotifier(this._dio, this._ref) : super(const AsyncLoading()) {
+    _ref.listen(gatewayTokenProvider, (prev, next) {
+      if (prev == null && next != null) load();
+    });
     load();
   }
 
   final Dio _dio;
+  final Ref _ref;
 
   Future<void> load() async {
     state = const AsyncLoading();
@@ -99,6 +104,15 @@ class SceneListNotifier extends StateNotifier<AsyncValue<List<Scene>>> {
       await _dio.post<Map<String, dynamic>>('/api/scenes', data: {
         'name': name,
         if (iconKey != null) 'iconKey': iconKey,
+        'favorite': false,
+        'actions': [
+          {
+            'deviceId': '00000000-0000-0000-0000-000000000000',
+            'commandJson': {'method': 'setPower', 'params': {'state': true}},
+            'delayMs': 0,
+            'sortOrder': 0,
+          }
+        ],
       });
       load();
       return null;

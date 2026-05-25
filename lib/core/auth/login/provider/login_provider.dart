@@ -80,6 +80,7 @@ class Login extends _$Login {
     } catch (e) {
       return false;
     }
+    await ref.read(gatewayAuthProvider).storeCredentials(email, password);
     await ref.read(gatewayAuthProvider).login(email, password);
     return true;
   }
@@ -114,6 +115,7 @@ class Login extends _$Login {
     if (getIt<IFirebaseService>().apps.isNotEmpty) {
       await getIt<NotificationService>().init();
     }
+    await ref.read(gatewayAuthProvider).tryAutoLogin();
   }
 
   Future<void> twoFaConfirmed(LoginResponse response) async {
